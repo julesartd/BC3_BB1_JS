@@ -38,30 +38,35 @@ const AdminDashboard = () => {
       <div className="dashboard-header">
         <h1>Tableau de bord administrateur</h1>
       </div>
-      
+
       <div className="dashboard-stats">
         <div className="stat-card">
           <h3>Clients inscrits</h3>
           <div className="stat-value">{clientCount}</div>
           <div className="stat-description">Nombre total de clients enregistrés</div>
         </div>
-        
+
         <div className="stat-card">
           <h3>Activité récente</h3>
           <div className="stat-value">24h</div>
           <div className="stat-description">Dernière connexion</div>
         </div>
-        
+
         <div className="stat-card">
           <h3>État du système</h3>
           <div className="stat-value">Actif</div>
           <div className="stat-description">Tous les services fonctionnent normalement</div>
         </div>
       </div>
-      
+
       <div className="dashboard-actions">
         <button className="action-button" disabled>Gérer les clients</button>
-        <button className="action-button" disabled>Gérer les Véhicules</button>
+        <button
+          className="action-button"
+          onClick={() => navigate('/vehicules')}
+        >
+          Gérer les Véhicules
+        </button>
         <button className="action-button" disabled>Rapports</button>
       </div>
     </div>

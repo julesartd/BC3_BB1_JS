@@ -1,0 +1,48 @@
+.vehicules-container {
+  margin: 20px 0;
+  padding: 20px;
+  background-color: white;
+  color: #333;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.vehicules-header {
+  background-color: #333;
+  color: white;
+  padding: 15px;
+  border-radius: 5px 5px 0 0;
+}
+
+.vehicules-header h2 {
+  margin: 0;
+  font-size: 2em;
+}
+
+.vehicules-header p {
+  margin: 5px 0 0 0;
+  font-size: 1.1em;
+}
+
+.vehicules-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.vehicules-table th, .vehicules-table td {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+  text-align: left;
+}
+
+.vehicules-table th {
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+.vehicules-error {
+  color: #c00;
+  font-weight: bold;
+  margin-top: 10px;
+}

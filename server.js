@@ -20,7 +20,7 @@ const corsOptions = {
 }
 
 const vehiculesRouter = require('./routes/vehicules');
-app.use('/api/vehicules', vehiculesRouter);
+
 
 // Middleware
 
@@ -28,6 +28,7 @@ app.use(bodyParser.json())
 app.use(cookieParser())
 app.use(cors(corsOptions))
 app.use(bodyParser.urlencoded({ extended: true }));
+
 
 // MySQL Connection
 const db = mysql.createConnection({
@@ -41,6 +42,8 @@ db.connect((err) => {
   if (err) throw err;
   console.log('Connected to MySQL Database');
 });
+
+
 const verifyTokenAndRole = (req, res, next) => {
     const token = req.cookies.token;
     if (!token) {
@@ -83,6 +86,11 @@ const verifyCSRFToken = (req, res, next) => {
 };
 
 // Routes
+
+app.use('/api/vehicules', (req, _res, next) => {
+  req.requiredroles = ["admin"];
+  next();
+}, verifyTokenAndRole, vehiculesRouter);
 
 app.get("/api/csrf", function (req, res) {
   const token = tokens.create(secretTokenCSRF);
