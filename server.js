@@ -18,6 +18,10 @@ const corsOptions = {
     credentials: true,
     optionsSuccessStatus: 204
 }
+
+const vehiculesRouter = require('./routes/vehicules');
+app.use('/api/vehicules', vehiculesRouter);
+
 // Middleware
 
 app.use(bodyParser.json())
