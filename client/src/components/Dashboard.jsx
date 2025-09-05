@@ -20,6 +20,8 @@ const AdminDashboard = () => {
         if (response.ok) {
           const data = await response.json();
           setClientCount(data.count);
+        } else if (response.status === 401) {
+          alert('Vous devez être connecté en tant qu\'administrateur pour accéder au tableau de bord');
         } else {
           alert('Erreur lors de la récupération du nombre de clients');
           navigate('/')

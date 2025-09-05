@@ -14,6 +14,7 @@ const VehiculeForm = ({ initialData = {}, onSuccess, mode = 'new' }) => {
     const [clients, setClients] = useState([]);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
+    const [csrfToken, setCsrfToken] = useState('');
 
     useEffect(() => {
         const fetchClients = async () => {
@@ -35,14 +36,34 @@ const VehiculeForm = ({ initialData = {}, onSuccess, mode = 'new' }) => {
     }, []);
 
     useEffect(() => {
-    setForm({
-      immatriculation: initialData.immatriculation || '',
-      marque: initialData.marque || '',
-      modele: initialData.modele || '',
-      annee: initialData.annee || '',
-      client_id: initialData.client_id || ''
-    });
-  }, [initialData]);
+        setForm({
+            immatriculation: initialData.immatriculation || '',
+            marque: initialData.marque || '',
+            modele: initialData.modele || '',
+            annee: initialData.annee || '',
+            client_id: initialData.client_id || ''
+        });
+    }, [initialData]);
+
+    
+    useEffect(() => {
+        const fetchCsrfToken = async () => {
+            try {
+                const res = await fetch(baseUri + 'api/csrf', {
+                    method: 'GET',
+                    credentials: 'include'
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    console.log("Token CSRF récupéré :", data.token);
+                    setCsrfToken(data.token);
+                }
+            } catch (err) {
+                console.error('Erreur lors de la récupération du token CSRF', err);
+            }
+        };
+        fetchCsrfToken();
+    }, []);
 
     const handleChange = e => {
         setForm({ ...form, [e.target.name]: e.target.value });
@@ -64,9 +85,10 @@ const VehiculeForm = ({ initialData = {}, onSuccess, mode = 'new' }) => {
                     'Content-Type': 'application/json',
                 },
                 credentials: 'include',
-                body: JSON.stringify(form)
+                body: JSON.stringify({ ...form, token: csrfToken })
             });
-            if (res.status === 401) {
+
+            if (res.status === 401 || res.status === 403) {
                 setError('Non autorisé');
                 return;
             }

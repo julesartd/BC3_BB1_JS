@@ -2,6 +2,7 @@ import { useState } from 'react';
 import VehiculeForm from '../VehiculeForm/VehiculeForm';
 import VehiculesList from '../VehiculesList/VehiculesList';
 import './VehiculePage.css';
+import Header from '../Header';
 
 const VehiculePage = () => {
   const [refresh, setRefresh] = useState(false);
@@ -11,9 +12,12 @@ const VehiculePage = () => {
     setRefresh(r => !r);
     setEditVehicule(null); // reset form
   };
+  
 
   return (
-    <div className="vehicule-page-container">
+    <>
+    {/* <Header /> */}
+     <div className="vehicule-page-container">
       <h2>{editVehicule ? 'Modifier le véhicule' : 'Ajouter un véhicule'}</h2>
       <VehiculeForm
         mode={editVehicule ? 'edit' : 'new'}
@@ -22,6 +26,8 @@ const VehiculePage = () => {
       />
       <VehiculesList key={refresh} onEdit={setEditVehicule} />
     </div>
+    </>
+   
   );
 };
 

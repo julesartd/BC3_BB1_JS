@@ -1,12 +1,27 @@
 const express = require('express');
 const router = express.Router();
 const mysql = require('mysql2/promise');
+const csrf = require("csrf");
+const secretTokenCSRF = 'OEKFNEZKkF78EZFH93';
+
+
+const tokens = new csrf();
+
 
 const dbConfig = {
     host: 'localhost',
     user: 'root',
     password: '',
     database: 'garage_db'
+};
+
+const verifyCSRFToken = (req, res, next) => {
+  const token = req.body.token;
+  // secretTokenCSRF à remplacer par process.env.CSRF_TOKEN si .env
+  if (!token || !tokens.verify(secretTokenCSRF, token)) {
+    return res.status(403).send("Invalid CSRF Token");
+  }
+  next();
 };
 
 // Liste tous les véhicules
@@ -29,7 +44,7 @@ router.get('/', async (req, res) => {
 });
 
 // Ajoute un véhicule
-router.post('/', async (req, res) => {
+router.post('/', verifyCSRFToken, async (req, res) => {
     const { immatriculation, marque, modele, annee, client_id } = req.body;
     if (!immatriculation || !marque || !modele || !annee) {
         return res.status(400).json({ error: 'Champs obligatoires manquants.' });
@@ -55,7 +70,7 @@ router.post('/', async (req, res) => {
 });
 
 // Modifie un véhicule
-router.put('/:id', async (req, res) => {
+router.put('/:id', verifyCSRFToken, async (req, res) => {
     const { immatriculation, marque, modele, annee, client_id } = req.body;
     const { id } = req.params;
     let conn;
@@ -82,7 +97,7 @@ router.put('/:id', async (req, res) => {
 });
 
 // Supprime un véhicule
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', verifyCSRFToken, async (req, res) => {
     const { id } = req.params;
     let conn;
     try {

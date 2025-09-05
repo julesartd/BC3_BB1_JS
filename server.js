@@ -6,9 +6,9 @@ const jwt = require('jsonwebtoken');
 const cors = require('cors');
 const path = require('path');
 const cookieParser = require('cookie-parser')
+const secretTokenCSRF = 'OEKFNEZKkF78EZFH93';
 const csrf = require("csrf");
 const tokens = new csrf();
-const secretTokenCSRF = 'OEKFNEZKkF78EZFH93';
 
 const app = express();
 const port = 3000;
@@ -20,8 +20,6 @@ const corsOptions = {
 }
 
 const vehiculesRouter = require('./routes/vehicules');
-
-
 // Middleware
 
 app.use(bodyParser.json())
@@ -76,14 +74,6 @@ const verifyTokenAndRole = (req, res, next) => {
     }
   };
 
-const verifyCSRFToken = (req, res, next) => {
-  const token = req.body.token;
-  // secretTokenCSRF à remplacer par process.env.CSRF_TOKEN si .env
-  if (!token || !tokens.verify(secretTokenCSRF, token)) {
-    return res.status(403).send("Invalid CSRF Token");
-  }
-  next();
-};
 
 // Routes
 
@@ -190,8 +180,10 @@ app.get("*", (_, res) => {
       path.join(__dirname, "./client/dist/index.html")
     )
 })
+
 // Start server
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
+
 module.exports = app;

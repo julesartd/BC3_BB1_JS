@@ -8,6 +8,9 @@ const Header = () => {
       <Link to="/auth">
         <button className="login-button">Connexion</button>
       </Link>
+      {/* <Link to="/dashboard">
+        <button className="login-button">Dashboard</button>
+      </Link> */}
     </header>
   );
 };
